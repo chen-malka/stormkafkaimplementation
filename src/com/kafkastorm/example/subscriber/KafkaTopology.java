@@ -50,7 +50,7 @@ public class KafkaTopology {
 		}
 	}
 
-	private static void getWordsAndWriteToFile() {
+	public static byte[] getWordsAndWriteToFile() {
 		DBCollection users =  ConnectProvider.getConnect().getCollection("user");
 		List<WordFrequency> wordFrequencies = Lists.newArrayList();
 		for (DBObject dbObject : users.find()) {
@@ -58,13 +58,13 @@ public class KafkaTopology {
 		}
 
 		try {
-			writeToStreamAsPNG(wordFrequencies);
+			return writeToStreamAsPNG(wordFrequencies);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
 	}
 
-	protected static byte[] writeToStreamAsPNG(List<WordFrequency> wordFrequencies) throws Exception {
+	public static byte[] writeToStreamAsPNG(List<WordFrequency> wordFrequencies) throws Exception {
 		final FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();
 		frequencyAnalyzer.setWordFrequencesToReturn(400);
 		frequencyAnalyzer.setMinWordLength(3);
