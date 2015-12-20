@@ -1,15 +1,14 @@
 package com.kafkastorm.example.jetty;
 
+import com.kafkastorm.example.subscriber.ImageGenerator;
+import org.eclipse.jetty.server.Request;
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.AbstractHandler;
+
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.ServletException;
-
 import java.io.IOException;
-
-import com.kafkastorm.example.subscriber.KafkaTopology;
-import org.eclipse.jetty.server.Server;
-import org.eclipse.jetty.server.Request;
-import org.eclipse.jetty.server.handler.AbstractHandler;
 
 /**
  * Created by anton.l on 12/20/2015.
@@ -31,7 +30,7 @@ public class ImageProvider extends AbstractHandler {
         baseRequest.setHandled(true);
 
 
-        byte[] imageBytes = KafkaTopology.getWordsAndWriteToFile();
+        byte[] imageBytes = ImageGenerator.getWordsAndWriteToFile();
         response.setHeader("Content-Type", "image/jpg");// or png or gif, etc
         response.setHeader("Content-Length", "" + imageBytes.length);
         response.getOutputStream().write(imageBytes);

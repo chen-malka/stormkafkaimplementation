@@ -41,54 +41,12 @@ public class KafkaTopology {
 		LocalCluster cluster = new LocalCluster();
 		cluster.submitTopology("kafka", config, builder.createTopology());
 
-		getWordsAndWriteToFile();
-
 		try {
 			Thread.sleep(100000000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
-
-	public static byte[] getWordsAndWriteToFile() {
-		DBCollection users =  ConnectProvider.getConnect().getCollection("user");
-		List<WordFrequency> wordFrequencies = Lists.newArrayList();
-		for (DBObject dbObject : users.find()) {
-			 wordFrequencies.add(new WordFrequency((String) dbObject.get("name"),(Integer)dbObject.get("count")));
-		}
-
-		try {
-			return writeToStreamAsPNG(wordFrequencies);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	public static byte[] writeToStreamAsPNG(List<WordFrequency> wordFrequencies) throws Exception {
-		final FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();
-		frequencyAnalyzer.setWordFrequencesToReturn(400);
-		frequencyAnalyzer.setMinWordLength(3);
-
-		final WordCloud wordCloud = new WordCloud(500, 500, CollisionMode.PIXEL_PERFECT);
-		wordCloud.setPadding(2);
-		wordCloud.setBackground(new CircleBackground(250));
-		wordCloud.setColorPalette(new ColorPalette(	new Color(0x4055F1),
-				new Color(0x408DF1),
-				new Color(0x40AAF1),
-				new Color(0x40C5F1),
-				new Color(0x40D3F1),
-				new Color(0xFFFFFF)));
-		wordCloud.setFontScalar(new SqrtFontScalar(15, 60));
-		wordCloud.build(wordFrequencies);
-		wordCloud.writeToFile("output/wordcloud_circle.png");
-
-
-		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		wordCloud.writeToStreamAsPNG(byteArrayOutputStream);
-
-		return  byteArrayOutputStream.toByteArray();
-	}
-
 
 
 
