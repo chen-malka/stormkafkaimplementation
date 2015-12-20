@@ -4,15 +4,21 @@ import backtype.storm.generated.GlobalStreamId;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.MessageId;
 import backtype.storm.tuple.Tuple;
-import com.kafkastorm.example.mongoDB.ConnectProvider;
 import com.kafkastorm.example.subscriber.ActiveUserSaverBolt;
 import com.mongodb.*;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
+import de.flapdoodle.embed.mongo.distribution.Version;
+import de.flapdoodle.embed.process.runtime.Network;
+import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 
+import java.net.UnknownHostException;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 public class MongoDBTest {
 

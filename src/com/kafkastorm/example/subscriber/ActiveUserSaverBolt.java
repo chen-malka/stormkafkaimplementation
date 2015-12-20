@@ -28,14 +28,18 @@ public class ActiveUserSaverBolt extends BaseRichBolt {
 		DBCursor cursor = users.find(searchQuery);
 		Iterator<DBObject> i = cursor.iterator();
 		if (i.hasNext()) {
-			searchQuery.put("name", "anton");
+			searchQuery.put("name", userName);
 			BasicDBObject newDocument = new BasicDBObject();
 			newDocument.put("count", (((Integer)users.find(searchQuery).iterator().next().get("count")))+1);
 			BasicDBObject updateObj = new BasicDBObject();
 			updateObj.put("$set", newDocument);
 			users.update(searchQuery, updateObj);
+		} else {
+			BasicDBObject document = new BasicDBObject();
+			document.put("name", userName);
+			document.put("count", 14);
+			users.insert(document);
 		}
-
 
 	}
 
