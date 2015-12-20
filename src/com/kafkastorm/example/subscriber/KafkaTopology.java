@@ -18,6 +18,7 @@ import wordcloud.nlp.FrequencyAnalyzer;
 import wordcloud.palette.ColorPalette;
 
 import java.awt.*;
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 public class KafkaTopology {
@@ -63,7 +64,7 @@ public class KafkaTopology {
 		}
 	}
 
-	protected static void writeToStreamAsPNG(List<WordFrequency> wordFrequencies) throws Exception {
+	protected static byte[] writeToStreamAsPNG(List<WordFrequency> wordFrequencies) throws Exception {
 		final FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();
 		frequencyAnalyzer.setWordFrequencesToReturn(400);
 		frequencyAnalyzer.setMinWordLength(3);
@@ -80,6 +81,12 @@ public class KafkaTopology {
 		wordCloud.setFontScalar(new SqrtFontScalar(15, 60));
 		wordCloud.build(wordFrequencies);
 		wordCloud.writeToFile("output/wordcloud_circle.png");
+
+
+		final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		wordCloud.writeToStreamAsPNG(byteArrayOutputStream);
+
+		return  byteArrayOutputStream.toByteArray();
 	}
 
 
