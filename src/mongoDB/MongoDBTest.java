@@ -62,8 +62,8 @@ public class MongoDBTest {
     public void connectionOnMemoryTest() {
         DBCollection table = db.getCollection("user");
         BasicDBObject document = new BasicDBObject();
-        document.put("name", "anton");
-        document.put("count", 30);
+        document.put("name", "chen");
+        document.put("count", 304);
         table.insert(document);
     }
 
@@ -72,8 +72,8 @@ public class MongoDBTest {
         DBCollection users = db.getCollection("user");
         Iterator<DBObject> i = users.find().iterator();
         while (i.hasNext()) {
-            Object nextElement =  i.next();
-            System.out.println(nextElement);
+            DBObject nextElement =  i.next();
+            System.out.println(nextElement.get("count"));
         }
     }
 
@@ -150,7 +150,7 @@ public class MongoDBTest {
 
             @Override
             public Object getValueByField(String s) {
-                return "anton";
+                return "brachi";
             }
 
             @Override
