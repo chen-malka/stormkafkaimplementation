@@ -4,35 +4,20 @@ import backtype.storm.generated.GlobalStreamId;
 import backtype.storm.tuple.Fields;
 import backtype.storm.tuple.MessageId;
 import backtype.storm.tuple.Tuple;
+import com.kafkastorm.example.mongoDB.ConnectProvider;
 import com.kafkastorm.example.subscriber.ActiveUserSaverBolt;
 import com.mongodb.*;
 import de.flapdoodle.embed.mongo.MongodExecutable;
 import de.flapdoodle.embed.mongo.MongodProcess;
-import de.flapdoodle.embed.mongo.distribution.Version;
-import de.flapdoodle.embed.process.runtime.Network;
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
 
-import java.net.UnknownHostException;
-import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 public class MongoDBTest {
 
     static
-    DB db= null;
-    static {
-        try {
-            MongoClient mongo = new MongoClient(new MongoClientURI("mongodb://localhost:27017"));
-
-            db = mongo.getDB("newDatabase");
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-    }
+    DB db= ConnectProvider.getConnect();
 
     private static final String DATABASE_NAME = "embedded";
 
@@ -72,8 +57,8 @@ public class MongoDBTest {
         DBCollection users = db.getCollection("user");
         Iterator<DBObject> i = users.find().iterator();
         while (i.hasNext()) {
-            Object nextElement =  i.next();
-            System.out.println(nextElement);
+            DBObject nextElement =  i.next();
+            System.out.println("user name : " +  nextElement.get("name") + " ; user count " + nextElement.get("count"));
         }
     }
 

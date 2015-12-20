@@ -1,52 +1,72 @@
 package com.kafkastorm.example.subscriber;
 
-import org.mcavallo.opencloud.Cloud;
-import org.mcavallo.opencloud.Tag;
+import wordcloud.CollisionMode;
+import wordcloud.WordCloud;
+import wordcloud.WordFrequency;
+import wordcloud.bg.CircleBackground;
+import wordcloud.font.scale.SqrtFontScalar;
+import wordcloud.nlp.FrequencyAnalyzer;
+import wordcloud.palette.ColorPalette;
 
-import javax.swing.*;
-import java.util.Random;
+import java.awt.*;
+import java.util.Arrays;
+import java.util.List;
 
 public class TestOpenCloud {
 
-    private static final String[] WORDS = { "art", "australia", "baby", "beach", "birthday", "blue", "bw", "california", "canada", "canon",
-            "cat", "chicago", "china", "christmas", "city", "dog", "england", "europe", "family", "festival", "flower", "flowers", "food",
-            "france", "friends", "fun", "germany", "holiday", "india", "italy", "japan", "london", "me", "mexico", "music", "nature",
-            "new", "newyork", "night", "nikon", "nyc", "paris", "park", "party", "people", "portrait", "sanfrancisco", "sky", "snow",
-            "spain", "summer", "sunset", "taiwan", "tokyo", "travel", "trip", "uk", "usa", "vacation", "water", "wedding" };
+	public static final List<WordFrequency> WORD_FREQUENCIES = Arrays
+			.asList(new WordFrequency("apple", 22),
+					new WordFrequency("Yuri", 3),
+					new WordFrequency("Shaul", 15),
+					new WordFrequency("Anton", 50),
+					new WordFrequency("Roni", 5),
+					new WordFrequency("Adish", 12),
+					new WordFrequency("Uriel", 10),
+					new WordFrequency("Ido", 7),
+					new WordFrequency("Dekel", 6),
+					new WordFrequency("Ofir", 2),
+					new WordFrequency("Adish", 12),
+					new WordFrequency("Ben", 29),
+					new WordFrequency("Chen", 22),
+					new WordFrequency("Ortal", 35),
+					new WordFrequency("Mishka", 1),
+					new WordFrequency("Moshe", 34),
+					new WordFrequency("Naor", 38),
+					new WordFrequency("Mor", 42),
+					new WordFrequency("Michal", 27),
+					new WordFrequency("Brachi", 20));
 
-    protected void initUI() {
-        JFrame frame = new JFrame(TestOpenCloud.class.getSimpleName());
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        JPanel panel = new JPanel();
-        Cloud cloud = new Cloud();
-        Random random = new Random();
-        for (String s : WORDS) {
-            for (int i = random.nextInt(50); i > 0; i--) {
-                cloud.addTag(s);
-                cloud.getTag(s).setWeight(1);
-            }
-        }
-        for (Tag tag : cloud.tags()) {
-            final JLabel label = new JLabel(tag.getName());
-            label.setOpaque(false);
-            label.setFont(label.getFont().deriveFont((float) tag.getWeight() * 10));
-            panel.add(label);
-        }
-        frame.add(panel);
-        frame.setSize(800, 600);
-        frame.setVisible(true);
-    }
+	protected void testWriteToStreamAsPNG(List<WordFrequency> wordFrequencies) throws Exception {
+		final FrequencyAnalyzer frequencyAnalyzer = new FrequencyAnalyzer();
+		frequencyAnalyzer.setWordFrequencesToReturn(400);
+		frequencyAnalyzer.setMinWordLength(3);
 
-    public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            @Override
-            public void run() {
-                new TestOpenCloud().initUI();
-            }
-        });
-    }
+		final WordCloud wordCloud = new WordCloud(500, 500, CollisionMode.PIXEL_PERFECT);
+		wordCloud.setPadding(2);
+		wordCloud.setBackground(new CircleBackground(250));
+		wordCloud.setColorPalette(new ColorPalette(	new Color(0x4055F1),
+													new Color(0x408DF1),
+													new Color(0x40AAF1),
+													new Color(0x40C5F1),
+													new Color(0x40D3F1),
+													new Color(0xFFFFFF)));
+		wordCloud.setFontScalar(new SqrtFontScalar(15, 60));
+		wordCloud.build(wordFrequencies);
+		wordCloud.writeToFile("output/wordcloud_circle.png");
+	}
 
-
-
+	public static void main(String[] args) {
+//		SwingUtilities.invokeLater(new Runnable() {
+//			@Override
+//			public void run() {
+//				// new TestOpenCloud().initUI();
+//				try {
+//					new TestOpenCloud().testWriteToStreamAsPNG(WORD_FREQUENCIES);
+//				} catch (Exception e) {
+//					throw new RuntimeException(e);
+//				}
+//			}
+//		});
+	}
 
 }
