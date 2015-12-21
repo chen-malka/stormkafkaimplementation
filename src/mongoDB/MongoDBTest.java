@@ -47,8 +47,8 @@ public class MongoDBTest {
     public void connectionOnMemoryTest() {
         DBCollection table = db.getCollection("user");
         BasicDBObject document = new BasicDBObject();
-        document.put("name", "Mishka");
-        document.put("count", 50);
+        document.put("name", "Ortal");
+        document.put("count", 1);
         table.insert(document);
     }
 
