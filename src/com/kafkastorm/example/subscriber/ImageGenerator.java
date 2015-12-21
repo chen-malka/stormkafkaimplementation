@@ -51,7 +51,7 @@ public class ImageGenerator {
                 new Color(0xFFFFFF)));
         wordCloud.setFontScalar(new SqrtFontScalar(15, 60));
         wordCloud.build(wordFrequencies);
-        wordCloud.writeToFile("src\\main\\webapp/wordcloud_circle.png");
+//        wordCloud.writeToFile("src\\main\\webapp/wordcloud_circle.png");
 
 
         final ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();

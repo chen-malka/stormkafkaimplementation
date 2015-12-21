@@ -4,11 +4,14 @@ import com.kafkastorm.example.subscriber.ImageGenerator;
 import org.eclipse.jetty.server.*;
 import org.eclipse.jetty.server.handler.*;
 
+import javax.imageio.ImageIO;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URLDecoder;
 
@@ -24,11 +27,30 @@ public class ImageProvider extends AbstractHandler {
 
     static int i = 0;
 
-    public void handle(String target,
+    public synchronized void handle(String target,
                        Request baseRequest,
                        HttpServletRequest request,
                        HttpServletResponse response){
         ImageGenerator.getWordsAndWriteToFile();
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream("src\\main\\webapp\\wordcloud_circle.png");
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        try {
+            fos.write(ImageGenerator.getWordsAndWriteToFile());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        finally {
+            try {
+                fos.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     public static void main(String[] args) throws Exception {
